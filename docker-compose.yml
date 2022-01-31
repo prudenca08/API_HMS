@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  server:
+    image: prudenca08/cicd-be:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    depends_on:
+      - hms
+    container_name: server
+    hostname: server
+    networks:
+      - mynetwork
+
+    ports:
+      - 8080:8080
+
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  hms:
+    image: mysql:8.0
+    container_name: hms
+    hostname: hms
+    networks:
+      - mynetwork
+    volumes:
+      - hms-volume:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:?database password not set}
+
+volumes:
+  hms-volume:
+
+networks:
+  mynetwork:
+    driver: bridge

@@ -1,0 +1,78 @@
+name: Deploy AWS
+
+on:
+  push:
+    paths-ignore:
+      - "**/README.md"
+    branches:
+      - master
+
+jobs:
+  push-to-docker-repository:
+    runs-on: ubuntu-latest
+    steps:
+      # Cache
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Login to docker hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: Checkout repo source code
+        uses: actions/checkout@v2
+
+      - name: Build & push docker image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+  deploy-aws:
+    runs-on: ubuntu-latest
+    needs: push-to-docker-repository
+    steps:
+      - name: Executing AWS SSH scripts
+        uses: appleboy/ssh-action@master
+        env:
+          DOCKER_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          DOCKER_COMPOSE_ENDPOINT: "https://raw.githubusercontent.com/raj847/finalproject-be/main/docker-compose.yml"
+        with:
+          host: ${{ secrets.AWS_EC2_SSH_HOST }}
+          port: 22
+          username: ${{ secrets.AWS_EC2_USER }}
+          key: ${{ secrets.AWS_EC2_SSH_KEY }}
+          timeout: "5m"
+          envs: DOCKER_IMAGE,DOCKER_COMPOSE_ENDPOINT
+          script: |
+            cd ~/ && mkdir -p app && cd app
+            docker-compose stop
+            docker-compose down
+            docker pull $DOCKER_IMAGE
+            docker rmi $(docker images -f "dangling=true" -q)
+            curl $DOCKER_COMPOSE_ENDPOINT > docker-compose.yml
+            docker-compose up -d

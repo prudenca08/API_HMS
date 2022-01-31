@@ -1,0 +1,749 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: "Hms API"
+  description: Hospital Management System API
+  contact:
+    name: HMS API
+    url: virtserver.swaggerhub.com/prudenca08/hms/1.0.0
+
+host: "localhost:8080"
+basePath: "/"
+tags:
+  - name: "Admin"
+  - name: "Doctor"
+  - name: "Patient"
+  - name: "Outpatientses"
+  - name: "Doctorses"
+  - name: "Patientschedule"
+
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+security: []
+paths:
+  /admins/register:
+    post:
+      tags:
+        - "Admin"
+      operationId: "postAdmin/register"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "Admin Register"
+          required: true
+          schema:
+            $ref: "#/definitions/admin"
+      responses:
+        "200":
+          description: "Success Register Admin"
+          headers: {}
+
+  /admins/login:
+    post:
+      tags:
+        - "Admin"
+      operationId: "postAdmin/login"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "Admin Login"
+          required: true
+          schema:
+            $ref: "#/definitions/admin"
+      responses:
+        "200":
+          description: "Success Login Admin"
+          headers: {}
+
+  /admins/update-doctor/id:
+    put:
+      tags:
+        - "Admin"
+      operationId: "putAdmin/update-doctor"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Update Doctor by Admin"
+          description: "Masukkan ID Doctor"
+          required: true
+          type: "integer"
+
+        - in: "body"
+          name: "Update Doctor Field"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/doctor"
+      responses:
+        "200":
+          description: "Success Update Doctor"
+          headers: {}
+
+  /admins/delete-doctor/id:
+    delete:
+      tags:
+        - "Admin"
+      operationId: "deleteAdmin/delete-doctor"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Delete Doctor by Admin"
+          description: "Masukkan ID Doctor"
+          required: true
+          type: "integer"
+      responses:
+        "200":
+          description: "Success Delete Doctor"
+          headers: {}
+
+  /admins/change-password-doctor/id:
+    put:
+      tags:
+        - "Admin"
+      operationId: "putAdmin/change-update-doctor"
+      parameters:
+        - name: "Change Password Doctor by Admin"
+          in: "header"
+          description: "Masukkan ID Doctor"
+          required: true
+          type: "integer"
+        - in: "body"
+          name: "Change Password Field"
+          required: true
+          schema:
+            $ref: "#/definitions/changepass"
+
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Success Change Password Doctor"
+          headers: {}
+
+  /doctor/register:
+    post:
+      tags:
+        - "Doctor"
+      operationId: "postDoctor/register"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "Token"
+          in: "header"
+          description: "Masukkan Token dari Admin"
+          required: true
+          type: "string"
+          default: "Bearer {token}"
+
+        - in: "body"
+          name: "Doctor Register Field"
+          required: true
+          schema:
+            $ref: "#/definitions/doctor"
+      # deprecated: false
+      responses:
+        "200":
+          description: "Success Register Doctor"
+          headers: {}
+
+  /doctor/login:
+    post:
+      tags:
+        - "Doctor"
+      operationId: "postDoctor/login"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "Token"
+          in: "header"
+          description: "Masukkan Token dari Admin"
+          required: true
+          type: "string"
+          default: "Bearer {token}"
+        - in: "body"
+          name: "Login"
+          required: true
+          schema:
+            $ref: "#/definitions/admin"
+
+      responses:
+        "200":
+          description: "Success Login Doctor"
+          headers: {}
+
+  /doctor/update-doctor/id:
+    put:
+      tags:
+        - "Doctor"
+      operationId: "putDoctor/update-doctor"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Update Doctor"
+          description: "Masukkan ID Doctor"
+          required: true
+          type: "integer"
+
+        - in: "body"
+          name: "Update Doctor Field"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/doctor"
+
+      responses:
+        "200":
+          description: "Success Update Doctor"
+          headers: {}
+
+  /doctor/change-password/id:
+    put:
+      tags:
+        - "Doctor"
+      operationId: "putDoctor/change-update-doctor"
+      parameters:
+        - name: "Change Password Doctor"
+          in: "header"
+          description: "Masukkan ID Doctor"
+          required: true
+          type: "integer"
+        - in: "body"
+          name: "Change Password Field"
+          required: true
+          schema:
+            $ref: "#/definitions/changepass"
+
+      responses:
+        "200":
+          description: "Success Change Password Doctor"
+          headers: {}
+  /doctor:
+    get:
+      tags:
+        - "Doctor"
+      operationId: "getDoctor"
+      produces:
+        - "application/json"
+
+      parameters:
+        - in: "body"
+          name: "Get Doctor"
+          description: "Get Data Doctor"
+          required: true
+          schema:
+            $ref: "#/definitions/doctor"
+
+      responses:
+        "200":
+          description: "Success Get Data Doctor"
+          headers: {}
+
+  /admins/create-patient:
+    post:
+      tags:
+        - "Patient"
+      operationId: "postPatient/create-patient"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "Create Patient by Admin"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/patient"
+
+      responses:
+        "200":
+          description: "Success Create Patient"
+          headers: {}
+
+  /admins/update-patient/id:
+    put:
+      tags:
+        - "Patient"
+      operationId: "putPatient/update-patient"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Update Patient by Admin"
+          description: "Masukkan ID Patient"
+          required: true
+          type: "integer"
+
+        - in: "body"
+          name: "Update Patient Field"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/patient"
+
+      responses:
+        "200":
+          description: "Success Update Patient"
+          headers: {}
+
+  /admins/delete-patient/id:
+    delete:
+      tags:
+        - "Patient"
+      operationId: "deletePatient/delete-patient"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Delete Patient by Admin"
+          description: "Masukkan ID Patient"
+          required: true
+          type: "integer"
+
+      responses:
+        "200":
+          description: "Success Delete Patient"
+          headers: {}
+
+  /patient:
+    get:
+      tags:
+        - "Patient"
+      operationId: "getPatient"
+      produces:
+        - "application/json"
+
+      parameters:
+        - in: "body"
+          name: "Get Patient"
+          description: "Get Data Patient"
+          required: true
+          schema:
+            $ref: "#/definitions/patient"
+
+      responses:
+        "200":
+          description: "Success Get Data Patient"
+          headers: {}
+
+  /admins/create-patientses:
+    post:
+      tags:
+        - "Outpatientses"
+      operationId: "postOutpatientses/create-patientses"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "Create Patientses by Admin"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/patientses"
+
+      responses:
+        "200":
+          description: "Success Create Patientses"
+          headers: {}
+
+  /admins/update-patientses/id:
+    put:
+      tags:
+        - "Outpatientses"
+      operationId: "putOutpatientses/update-patientses"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Update Patientses by Admin"
+          description: "Masukkan ID Patientses"
+          required: true
+          type: "integer"
+
+        - in: "body"
+          name: "Update Patientses Field"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/patientses"
+
+      responses:
+        "200":
+          description: "Success Update Patientses"
+          headers: {}
+
+  /admins/delete-patientses/id:
+    delete:
+      tags:
+        - "Outpatientses"
+      operationId: "deleteOutpatientses/delete-patientses"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Delete Patientses by Admin"
+          description: "Masukkan ID Patientses"
+          required: true
+          type: "integer"
+
+      responses:
+        "200":
+          description: "Success Delete Patientses"
+          headers: {}
+
+  /patientses:
+    get:
+      tags:
+        - "Outpatientses"
+      operationId: "getOutpatientses"
+      produces:
+        - "application/json"
+
+      parameters:
+        - in: "body"
+          name: "Get Patientses"
+          description: "Get Data Patientses"
+          required: true
+          schema:
+            $ref: "#/definitions/patientses"
+
+      responses:
+        "200":
+          description: "Success Get Data Patientses"
+          headers: {}
+
+  /admins/create-docses:
+    post:
+      tags:
+        - "Doctorses"
+      operationId: "postDoctorses/create-docses"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "Create Doctorses by Admin"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/docses"
+
+      responses:
+        "200":
+          description: "Success Create Doctorses"
+          headers: {}
+
+  /admins/update-docses/id:
+    put:
+      tags:
+        - "Doctorses"
+      operationId: "putDoctorses/update-docses"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Update Doctorses by Admin"
+          description: "Masukkan ID Doctorses"
+          required: true
+          type: "integer"
+
+        - in: "body"
+          name: "Update Doctorses Field"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/docses"
+
+      responses:
+        "200":
+          description: "Success Update Doctorses"
+          headers: {}
+
+  /admins/delete-docses/id:
+    delete:
+      tags:
+        - "Doctorses"
+      operationId: "deleteDoctorses/delete-docses"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Delete Doctorses by Admin"
+          description: "Masukkan ID Doctorses"
+          required: true
+          type: "integer"
+
+      responses:
+        "200":
+          description: "Success Delete Doctorses"
+          headers: {}
+
+  /docses:
+    get:
+      tags:
+        - "Doctorses"
+      operationId: "getDoctorses"
+      produces:
+        - "application/json"
+
+      parameters:
+        - in: "body"
+          name: "Get Doctorses"
+          description: "Get Data Doctorses"
+          required: true
+          schema:
+            $ref: "#/definitions/docses"
+
+      responses:
+        "200":
+          description: "Success Get Data Doctorses"
+          headers: {}
+
+  /admins/create-patsche:
+    post:
+      tags:
+        - "Patientschedule"
+      operationId: "postPatientschedule/create-patsche"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "Create Patientschedule by Admin"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/patientsches"
+
+      responses:
+        "200":
+          description: "Success Create Patientschedule"
+          headers: {}
+
+  /admins/update-patsche/id:
+    put:
+      tags:
+        - "Patientschedule"
+      operationId: "putPatientschedule/update-patsche"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Update Patientschedule by Admin"
+          description: "Masukkan ID Patientschedule"
+          required: true
+          type: "integer"
+
+        - in: "body"
+          name: "Update Patientschedule Field"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/patientsches"
+
+      responses:
+        "200":
+          description: "Success Update Patientschedule"
+          headers: {}
+
+  /admins/delete-patsche/id:
+    delete:
+      tags:
+        - "Patientschedule"
+      operationId: "deletePatientschedule/delete-patsche"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "Delete Patientschedule by Admin"
+          description: "Masukkan ID Patientschedule"
+          required: true
+          type: "integer"
+
+      responses:
+        "200":
+          description: "Success Delete Patientschedule"
+          headers: {}
+
+  /patsche:
+    get:
+      tags:
+        - "Patientschedule"
+      operationId: "getPatientschedule"
+      produces:
+        - "application/json"
+
+      parameters:
+        - in: "body"
+          name: "Get Patientschedule"
+          description: "Get Data Patientschedule"
+          required: true
+          schema:
+            $ref: "#/definitions/patientsches"
+
+      responses:
+        "200":
+          description: "Success Get Data Patientschedule"
+          headers: {}
+
+securityDefinitions: {}
+
+definitions:
+  admin:
+    required:
+      - "ID"
+      - "Password"
+      - "Username"
+      - "Token"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+
+  doctor:
+    required:
+      - "ID"
+      - "DoctorsessionID"
+      - "Username"
+      - "Password"
+      - "Name"
+      - "NIP"
+      - "Experience"
+      - "Specialist"
+      - "Room"
+      - "Phone_Number"
+      - "Status"
+      - "Token"
+    properties:
+      id:
+        type: "integer"
+      doctorsessionid:
+        type: "integer"
+      username:
+        type: "string"
+      password:
+        type: "string"
+      name:
+        type: "string"
+      nip:
+        type: "string"
+      experience:
+        type: "string"
+      specialist:
+        type: "string"
+      room:
+        type: "string"
+      phone_number:
+        type: "string"
+      status:
+        type: "string"
+      token:
+        type: "string"
+
+  patient:
+    required:
+      - "ID"
+      - "AdminID"
+      - "Name"
+      - "NIK"
+      - "DOB"
+      - "Gender"
+      - "Phone"
+      - "Address"
+    properties:
+      id:
+        type: "integer"
+      adminid:
+        type: "integer"
+      name:
+        type: "string"
+      nik:
+        type: "string"
+      dob:
+        type: "string"
+      gender:
+        type: "string"
+      phone:
+        type: "string"
+      address:
+        type: "string"
+
+  docses:
+    required:
+      - "ID"
+      - "AdminID"
+      - "Day"
+      - "Time"
+    properties:
+      id:
+        type: "integer"
+      adminid:
+        type: "integer"
+      day:
+        type: "string"
+      time:
+        type: "string"
+
+  patientses:
+    required:
+      - "ID"
+      - "AdminID"
+      - "DoctorID"
+      - "PatientID"
+      - "PatientScheduleID"
+      - "Date"
+      - "Symptoms"
+      - "Title"
+      - "DetailRecipe"
+      - "Status"
+    properties:
+      id:
+        type: "integer"
+      adminid:
+        type: "integer"
+      doctorid:
+        type: "integer"
+      patientid:
+        type: "integer"
+      patientscheduleid:
+        type: "integer"
+      date:
+        type: "string"
+      symptoms:
+        type: "string"
+      title:
+        type: "string"
+      detailrecipe:
+        type: "string"
+      status:
+        type: "string"
+
+  patientsches:
+    required:
+      - "ID"
+      - "AdminID"
+      - "Day"
+      - "Time"
+    properties:
+      id:
+        type: "integer"
+      adminid:
+        type: "integer"
+      day:
+        type: "string"
+      time:
+        type: "string"
+
+  changepass:
+    required:
+      - "Password"
+      - "Confirm Password"
+    properties:
+      password:
+        type: "string"
+      confirmpass:
+        type: "string"
