@@ -24,13 +24,14 @@ services:
   hms:
     image: mysql:8.0
     container_name: hms
-    hostname: hms
+    hostname: finalproject.cvtknwsvykds.us-east-2.rds.amazonaws.com
     networks:
       - mynetwork
     volumes:
       - hms-volume:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:?database password not set}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:?database password not set}
+      - MYSQL_USER=${MYSQL_USER:?database password not set}
 
 volumes:
   hms-volume:

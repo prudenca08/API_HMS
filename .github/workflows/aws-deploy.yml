@@ -60,7 +60,7 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           DOCKER_IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:latest
-          DOCKER_COMPOSE_ENDPOINT: "https://raw.githubusercontent.com/raj847/finalproject-be/main/docker-compose.yml"
+          DOCKER_COMPOSE_ENDPOINT: "https://raw.githubusercontent.com/prudenca08/API_HMS/master/docker-compose.yml"
         with:
           host: ${{ secrets.AWS_EC2_SSH_HOST }}
           port: 22
